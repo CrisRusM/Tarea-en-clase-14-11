@@ -1,6 +1,6 @@
 package com.salesianostriana.edu.tareaenclase1411.service;
 
-import com.salesianostriana.edu.tareaenclase1411.dto.NewMonumentoCommand;
+import com.salesianostriana.edu.tareaenclase1411.dto.EditMonumentoCommand;
 import com.salesianostriana.edu.tareaenclase1411.error.MonumentoNotFoundException;
 import com.salesianostriana.edu.tareaenclase1411.model.Monumento;
 import com.salesianostriana.edu.tareaenclase1411.repository.MonumentoRepository;
@@ -27,7 +27,7 @@ public class MonumentoService {
                 .orElseThrow(()->new MonumentoNotFoundException(id));
     }
 
-    public Monumento save (NewMonumentoCommand monumento){
+    public Monumento save (EditMonumentoCommand monumento){
         return monumentoRepository.save(
                 Monumento.builder()
                         .codigoPais(monumento.codigoPais())
@@ -41,8 +41,24 @@ public class MonumentoService {
         );
     }
 
-    /*public Monumento edit(NewMonumentoCommand monumento, Long id){
+    public Monumento edit(EditMonumentoCommand monumento, Long id){
+        return monumentoRepository.findById(id)
+                .map(m -> {
+                    m.setNombreCiudad(monumento.nombreCiudad());
+                    m.setDescripcion(monumento.descripcion());
+                    m.setLatitud(monumento.latitud());
+                    m.setLongitud(monumento.longitud());
+                    m.setNombreMonumento(monumento.nombreMonumento());
+                    m.setCodigoPais(monumento.codigoPais());
+                    m.setNombrePais(monumento.nombrePais());
+                    m.setUrl(monumento.url());
+                    return monumentoRepository.save(m);
+                })
+                .orElseThrow(() -> new MonumentoNotFoundException(id));
+    }
 
-    }*/
+    public void delete(Long id){
+        monumentoRepository.deleteById(id);
+    }
 
 }

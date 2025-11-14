@@ -1,6 +1,6 @@
 package com.salesianostriana.edu.tareaenclase1411.controller;
 
-import com.salesianostriana.edu.tareaenclase1411.dto.NewMonumentoCommand;
+import com.salesianostriana.edu.tareaenclase1411.dto.EditMonumentoCommand;
 import com.salesianostriana.edu.tareaenclase1411.model.Monumento;
 import com.salesianostriana.edu.tareaenclase1411.service.MonumentoService;
 import lombok.RequiredArgsConstructor;
@@ -28,9 +28,20 @@ public class MonumentoController {
     }
 
     @PostMapping
-    public ResponseEntity<Monumento> create(@RequestBody NewMonumentoCommand cmd){
+    public ResponseEntity<Monumento> create(@RequestBody EditMonumentoCommand cmd){
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(monumentoService.save(cmd));
+    }
+
+    @PutMapping("/{id}")
+    public Monumento edit(@RequestBody EditMonumentoCommand cmd, @PathVariable Long id){
+        return monumentoService.edit(cmd,id);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> delete(@PathVariable Long id){
+        monumentoService.delete(id);
+        return ResponseEntity.noContent().build();
     }
 
 }
